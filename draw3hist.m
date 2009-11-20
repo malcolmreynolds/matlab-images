@@ -1,9 +1,9 @@
 function draw3hist(bins,the_title)
 
 figure;
-plot(bins{1},'r');
+plot(bins.r,'r');
 hold on;
-plot(bins{2},'g');
-plot(bins{3},'b');
+plot(bins.g,'g');
+plot(bins.b,'b');
 hold off;
 title(the_title);
