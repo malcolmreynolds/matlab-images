@@ -1,14 +1,16 @@
 function bins = alpha_hist(Im,A)
-%alpha_im_hist Histogram of RGB values for an RGB image with
-%associated alpha mask. Takes an alpha mask which CAN be
-%fractional. Image must be uint8!
+%Histogram of RGB values for an RGB image w/ alpha mask
+%Takes an alpha mask which CAN be
+%fractional. Im must be uint8!
 
 if (size(Im,3) ~= 3),
-  error('alpha_im_hist:numberOfSamples', 'Input image must be RGB');
+  error('alpha_hist:numberOfSamples', 'Input image must be RGB');
 elseif (length(size(A)) ~= 2),
-  error('alpha_im_hist:alphaMaskNotAMask','Alpha mask must be 2 dimensional');
+  error('alpha_hist:alphaMaskNotAMask','Alpha mask must be 2 dimensional');
 elseif (size(A,1) ~= size(Im,1) || size(A,2) ~= size(Im,2)),
-  error('alpha_im_hist:amaskSize','Alpha mask size must match');
+  error('alpha_hist:amaskSize','Alpha mask size must match');
+elseif max(max(A)) > 1,
+  warning('alpha_hist:amaskValuesTooLarge','alpha mask contains values greater than 1!');
 end
 
 numpixels = prod(size(A));
