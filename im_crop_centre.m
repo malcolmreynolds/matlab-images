@@ -4,14 +4,14 @@ function I = im_crop_centre(Im,nw,nh)
 
 [oh ow depth] = size(Im);
 
-if abs((nw/nh) - (ow/oh)) > 0.001,
-  error(['im_pad_centre: aspect ratio: converting (%dx%d) image to ' ...
-         '(%dx%d)'],ow,oh,nw,nh);
-end
+% if abs((nw/nh) - (ow/oh)) > 0.05,
+%   error(['im_pad_centre: aspect ratio: converting (%dx%d) image to ' ...
+%          '(%dx%d)'],ow,oh,nw,nh);
+% end
 
 %indices to cut from in the smaller image
-start_x = ((ow-nw)/2)+1;
-start_y = ((oh-nh)/2)+1;
+start_x = round(((ow-nw)/2)+1);
+start_y = round(((oh-nh)/2)+1);
 
 %this should work for both 3 and 1 channels
 I = Im(start_y:(start_y+nh-1), ...

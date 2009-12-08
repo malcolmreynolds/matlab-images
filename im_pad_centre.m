@@ -7,16 +7,16 @@ function I = im_pad_centre(Im,nw,nh)
 
 [oh ow depth] = size(Im);
 
-if abs((nw/nh) - (ow/oh)) > 0.001,
-  error(['im_pad_centre: aspect ratio: converting (%dx%d) image to ' ...
-         '(%dx%d)'],ow,oh,nw,nh);
-end
+% if abs((nw/nh) - (ow/oh)) > 0.05,
+%   error(['im_pad_centre: aspect ratio: converting (%dx%d) image to ' ...
+%          '(%dx%d)'],ow,oh,nw,nh);
+% end
 
 %indices in the new larger image
-start_x = ((nw - ow) / 2)+1;
-start_y = ((nh - oh) / 2)+1;
+start_x = round(((nw - ow) / 2)+1);
+start_y = round(((nh - oh) / 2)+1);
   
-I = uint8(zeros(nw,nh,depth));
+I = uint8(zeros(nh,nw,depth));
 
 % Create and fill in the new image
 I(start_y:(start_y+oh-1), ...
