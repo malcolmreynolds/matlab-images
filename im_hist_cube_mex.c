@@ -2,8 +2,14 @@
 #include <assert.h>
 
 /** This matches the functionality of im_hist_cube.m - returns a
-    256x256x256 histogram cube. It is aware of alpha masks.
-*/
+    256x256x256 histogram cube. It is aware of alpha masks, indeed it
+    requires one to run at all. The alpha mask must be a double and
+    elements are expected to be in the range 0.0 to 1.0, and the image
+    must be a uint8
+ */
+
+// obviously this only works when cubePtr is defined
+#define CUBEPTR(r,g,b) cubePtr[((b)*256*256) + ((g)*256) + (r)]
 
 //Constants
 mwSize DIMENSIONS[] = { 256, 256, 256 };
@@ -75,24 +81,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   unsigned int i;
   unsigned char r, g, b;
   double a;
-  mexPrintf("About to do for loop\n");
-  mexPrintf("rPtr = 0x%x\ngPtr = 0x%x\nbPtr = 0x%x\n",rPtr,gPtr,bPtr);
-  mexPrintf("Another thing...\n");
 
   for (i=0; i<numPixels; i++) {
+    a = *aMaskPtr++;
+    // we won't be adding anything to the cube on this round, so skip.
+    if (a == 0.0) continue;
+    
+    //get colours
     r = *rPtr++;
     g = *gPtr++;
-    b = *bPtr++;
-    a = *aMaskPtr++;
-    if (a == 0.0) continue;
-    mexPrintf("p%d: (%d,%d,%d,%f)",i,r,g,b,a);
-    //seriously, fuck this shit!
-    cubePtr[(b*256*256) + (g*256) + r] += a;
-    mexPrintf(" - increment cube(%d,%d,%d) to %f\n",
-              r,g,b,cubePtr[(b*256*256) + (256*g) + r]);
+    b = *bPtr++; 
+    CUBEPTR(r,g,b) += a;
   }
-
-  mexPrintf("end of function updated to work\n");
 }
 
 /**
