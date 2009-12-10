@@ -99,12 +99,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
   //normalise by the number of pixels in the image
   for (i=0; i<TOTALCUBESIZE; i++) {
-    //if we don't do this check, get a bunch of NaN. Possibly this is better
-    //done outside the C...
-    if (*cubePtr > 0.0) {
-      *cubePtr /= total_alpha;
-    }
-    *cubePtr++;
+    *cubePtr++ /= total_alpha;
   }
 }
 
