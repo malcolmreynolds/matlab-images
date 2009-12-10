@@ -20,7 +20,7 @@ const mxArray* amask;
 double* aMaskPtr;
 double* cubePtr;
 
-unsigned int numElements(mxArray* array);
+unsigned int numElements(const mxArray* array);
 unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask);
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
@@ -64,7 +64,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   cubePtr = mxGetPr(plhs[0]);
 
   //get pointer to the data. r is first
-  rPtr = mxGetPr(im);
+  rPtr = (unsigned char *)mxGetPr(im);
   // the total elements of the mask is one third of the elements in the full image, so 
   // skip forward by this amount to get to the next channel.
   unsigned int numPixels = numElements(amask);
@@ -95,9 +95,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 /**
  Get the number of elements in an mxArray
  */
-unsigned int numElements(mxArray* array) {
+unsigned int numElements(const mxArray* array) {
   mwSize numDims = mxGetNumberOfDimensions(array);
-  mwSize* dimsArray = mxGetDimensions(array);
+  const mwSize* dimsArray = mxGetDimensions(array);
   unsigned int num = 1;
   unsigned int i;
 
@@ -109,8 +109,8 @@ unsigned int numElements(mxArray* array) {
 }
 
 unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask) {
-  mwSize* imDims = mxGetDimensions(im);
-  mwSize* maskDims = mxGetDimensions(im);
+  const mwSize* imDims = mxGetDimensions(im);
+  const mwSize* maskDims = mxGetDimensions(im);
 
   if (imDims[0] != maskDims[0]) return 0;
   if (imDims[1] != maskDims[1]) return 0;
