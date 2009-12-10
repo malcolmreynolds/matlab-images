@@ -15,8 +15,11 @@ end
 %create the cube
 cube = zeros(256,256,256);
 
-for x = 1:size(Im,2),
-  for y = 1:size(Im,1),
+numx = size(Im,2);
+numy = size(Im,1);
+
+for x = 1:numx,
+  for y = 1:numy,
     if A(y,x) == 0.0,
       continue;
     end
@@ -32,3 +35,7 @@ for x = 1:size(Im,2),
 %            r,g,b,cube(r+1,g+1,b+1));
   end
 end
+
+%divide by total alpha components
+cube = cube ./ sum(sum(A));
+

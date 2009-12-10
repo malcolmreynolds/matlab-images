@@ -9,10 +9,13 @@
  */
 
 // obviously this only works when cubePtr is defined
-#define CUBEPTR(r,g,b) cubePtr[((b)*256*256) + ((g)*256) + (r)]
+#define CUBEPTR(r,g,b) cubePtr[((b)*CUBE_SIDE*CUBE_SIDE) + ((g)*CUBE_SIDE) + (r)]
 
-//Constants
-mwSize DIMENSIONS[] = { 256, 256, 256 };
+// need to change this if for some reason the images aren't uint8 any
+// more (ie quantised into 16 bits or something)
+#define CUBE_SIDE 256
+mwSize DIMENSIONS[] = { CUBE_SIDE, CUBE_SIDE, CUBE_SIDE };
+const unsigned int TOTALCUBESIZE = CUBE_SIDE * CUBE_SIDE * CUBE_SIDE;
 
 //Working variables
 const mxArray* im;
@@ -79,6 +82,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   unsigned int i;
   unsigned char r, g, b;
   double a;
+  double total_alpha = 0.0;
 
   for (i=0; i<numPixels; i++) {
     //get alpha value and colours
@@ -89,6 +93,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     // we won't be adding anything to the cube on this round, so skip.
     if (a == 0.0) continue;
     CUBEPTR(r,g,b) += a;
+    //keep track of the total amount of alpha for normalisation.
+    total_alpha += a;
+  }
+
+  //normalise by the number of pixels in the image
+  for (i=0; i<TOTALCUBESIZE; i++) {
+    *cubePtr++ /= total_alpha;
   }
 }
 

@@ -32,4 +32,11 @@ for p=1:numpixels,
   bins.b(Im_vec_b(p)+1) = bins.b(Im_vec_b(p)+1) + amt;
 end
 
+total_alpha = sum(A_vec);
+
+%normalise by number of pixels
+bins.r = bins.r ./ total_alpha;
+bins.g = bins.g ./ total_alpha;
+bins.b = bins.b ./ total_alpha;
+
 
