@@ -15,13 +15,13 @@
 mwSize DIMENSIONS[] = { 256, 256, 256 };
 
 //Working variables
-mxArray* im;
-mxArray* amask;
+const mxArray* im;
+const mxArray* amask;
 double* aMaskPtr;
 double* cubePtr;
 
 unsigned int numElements(mxArray* array);
-unsigned int imageSizeMatchesMask(mxArray* im, mxArray* mask);
+unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask);
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   if (nrhs != 2) {
@@ -46,11 +46,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   if (!imageSizeMatchesMask(im,amask)) {
     mexErrMsgTxt("im_hist_cube_mex image and mask size do not mask!");
   }
-
   if (!mxIsUint8(im)) {
     mexErrMsgTxt("im_hist_cube_mex - first argument should be type uint8\n");
   }
-
   if (!mxIsDouble(amask)) {
     mexErrMsgTxt("im_hist_cube_mex - second argument should be type double\n");
   }
@@ -70,7 +68,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   // the total elements of the mask is one third of the elements in the full image, so 
   // skip forward by this amount to get to the next channel.
   unsigned int numPixels = numElements(amask);
-  mexPrintf("%d pixels\n",numPixels);
+  //  mexPrintf("%d pixels\n",numPixels);
   gPtr = rPtr + numPixels;
   bPtr = rPtr + (2*numPixels);
 
@@ -83,14 +81,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   double a;
 
   for (i=0; i<numPixels; i++) {
+    //get alpha value and colours
     a = *aMaskPtr++;
-    // we won't be adding anything to the cube on this round, so skip.
-    if (a == 0.0) continue;
-    
-    //get colours
     r = *rPtr++;
     g = *gPtr++;
     b = *bPtr++; 
+    // we won't be adding anything to the cube on this round, so skip.
+    if (a == 0.0) continue;
     CUBEPTR(r,g,b) += a;
   }
 }
@@ -111,7 +108,7 @@ unsigned int numElements(mxArray* array) {
   return num;
 }
 
-unsigned int imageSizeMatchesMask(mxArray* im, mxArray* mask) {
+unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask) {
   mwSize* imDims = mxGetDimensions(im);
   mwSize* maskDims = mxGetDimensions(im);
 
