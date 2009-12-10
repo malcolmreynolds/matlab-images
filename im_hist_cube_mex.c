@@ -47,7 +47,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     mexErrMsgTxt("im_hist_cube_mex second argument should be 2 dimensional!");
   }
   if (!imageSizeMatchesMask(im,amask)) {
-    mexErrMsgTxt("im_hist_cube_mex image and mask size do not mask!");
+    mexErrMsgTxt("im_hist_cube_mex image and mask size do not match!");
   }
   if (!mxIsUint8(im)) {
     mexErrMsgTxt("im_hist_cube_mex - first argument should be type uint8\n");
@@ -121,7 +121,10 @@ unsigned int numElements(const mxArray* array) {
 
 unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask) {
   const mwSize* imDims = mxGetDimensions(im);
-  const mwSize* maskDims = mxGetDimensions(im);
+  const mwSize* maskDims = mxGetDimensions(mask);
+
+  mexPrintf("im is %dx%d\n",imDims[0],imDims[1]);
+  mexPrintf("mask is %dx%d\n",maskDims[0],maskDims[1]);
 
   if (imDims[0] != maskDims[0]) return 0;
   if (imDims[1] != maskDims[1]) return 0;
