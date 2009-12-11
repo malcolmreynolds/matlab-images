@@ -1,2 +1,3 @@
 *.m~
-im_hist_cube_mex.mexmaci
+*.mexmaci
+*.o
