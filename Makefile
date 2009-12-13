@@ -4,10 +4,10 @@ LIBS = mex_im_utils.o
 
 #for now, assume all the files are dependent on all the libs (only 1 anyway...)
 %.mexmaci : %.c $(LIBS)
-	mex CFLAGS='$$CFLAGS -Wall' -o $@ $< $(LIBS)
+	mex CFLAGS='$$CFLAGS -Wall -std=c99' -o $@ $< $(LIBS)
 
 %.o : %.c %.h
-	mex CFLAGS='$$CFLAGS -Wall' -c $<
+	mex CFLAGS='$$CFLAGS -Wall -std=c99' -c $<
 
 #mex_im_utils.o: mex_im_utils.c mex_im_utils.h
 #	mex CFLAGS='$$CFLAGS -Wall' -c mex_im_utils.c

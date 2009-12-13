@@ -24,35 +24,22 @@ double* aMaskPtr;
 double* cubePtr;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
-  if (nrhs != 2) {
-    mexErrMsgTxt("im_hist_cube_mex expects 2 arguments!");
-  }
-  if (nlhs > 1) {
-    mexErrMsgTxt("im_hist_cube_mex only supports one lhs argument!");
-  }
+  ASSERT_NUM_RHS_ARGS_EQUALS(2);
+  ASSERT_NUM_LHS_ARGS_LT(2);
   
   //grab the arguments
   im = prhs[0];
   amask = prhs[1];
   
-  //check im has 3 channels, etc
-  if (mxGetNumberOfDimensions(im) != 3 ||
-      mxGetDimensions(im)[2] != 3) {
-    mexErrMsgTxt("im_hist_cube_mex first argument should have 3 channels!");
-  }
-  if (mxGetNumberOfDimensions(amask) != 2) {
-    mexErrMsgTxt("im_hist_cube_mex second argument should be 2 dimensional!");
-  }
+  ASSERT_HAS_3_CHANNELS(im,0);
+  ASSERT_2D_ARRAY(amask,1);
+  ASSERT_IS_UINT8(im,0);
+  ASSERT_IS_DOUBLE(amask,1);
+ 
   if (!imageSizeMatchesMask(im,amask)) {
     mexErrMsgTxt("im_hist_cube_mex image and mask size do not match!");
   }
-  if (!mxIsUint8(im)) {
-    mexErrMsgTxt("im_hist_cube_mex - first argument should be type uint8\n");
-  }
-  if (!mxIsDouble(amask)) {
-    mexErrMsgTxt("im_hist_cube_mex - second argument should be type double\n");
-  }
-
+ 
   //at this point I think we are sorted in terms of checking the input. Now create
   //pointers to go over the red, green and blue channels.
   unsigned char *rPtr;
