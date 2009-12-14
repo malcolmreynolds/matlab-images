@@ -8,13 +8,25 @@
    the same size (currently of type double) containing either one or zero.
 */
 
-//change these if I want, for example, uint8 output
+// I could use createLogicalArray but meh.
+#ifdef UINT_MASK //produce the mask as uint8s to save space
+
+#define OUTPUT_TYPE_CONSTANT mxUINT8_CLASS
+#define OUTPUT_C_TYPE unsigned char
+#define OUTPUT_PTR_TYPE unsigned char *
+#define ABOVE_THRESH 1
+#define BELOW_THRESH 0
+
+#else
+
 #define OUTPUT_TYPE_CONSTANT mxDOUBLE_CLASS
 #define OUTPUT_C_TYPE double
 #define OUTPUT_PTR_TYPE double*
 #define ABOVE_THRESH 1.0
 #define BELOW_THRESH 0.0
- 
+
+#endif  //UINT_MASK
+
 unsigned int numPixels, i;
 double *p1, *p2;
 double diff, max_diff, threshold;
