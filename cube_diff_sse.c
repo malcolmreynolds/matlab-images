@@ -28,6 +28,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   c1ptr = mxGetPr(cube1);
   c2ptr = mxGetPr(cube2);
 
+  numPixels = num_elements(cube1);
   total = 0.0;
   for (i=0; i<numPixels; i++) {
     val = (*c1ptr - *c2ptr);
