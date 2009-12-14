@@ -42,7 +42,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_IS_UINT8(im,0);
   ASSERT_IS_DOUBLE(amask,1);
  
-  if (!imageSizeMatchesMask(im,amask)) {
+  if (!image_size_matches_mask(im,amask)) {
     mexErrMsgTxt("im_hist_cube_mex image and mask size do not match!");
   }
 
@@ -54,7 +54,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   rPtr = (unsigned char *)mxGetPr(im);
   // the total elements of the mask is one third of the elements in the full image, so 
   // skip forward by this amount to get to the next channel.
-  numPixels = numElements(amask);
+  numPixels = num_elements(amask);
   //  mexPrintf("%d pixels\n",numPixels);
   gPtr = rPtr + numPixels;
   bPtr = rPtr + (2*numPixels);

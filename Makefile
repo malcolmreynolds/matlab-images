@@ -1,5 +1,10 @@
 
-allmex: im_hist_cube_res.mexmaci cube_diff_sse.mexmaci im_hist_cube_mex.mexmaci cube_sse_unsafe.mexmaci
+allmex: im_hist_cube_res.mexmaci  \
+				cube_diff_sse.mexmaci \
+				im_hist_cube_mex.mexmaci \
+				cube_sse_unsafe.mexmaci \
+				norm_cube.mexmaci
+
 LIBS = mex_im_utils.o
 
 #for now, assume all the files are dependent on all the libs (only 1 anyway...)

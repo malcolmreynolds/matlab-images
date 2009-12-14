@@ -25,8 +25,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_IS_DOUBLE(cube1,0);
   ASSERT_IS_DOUBLE(cube2,1);
 
-  numPixels = numElements(cube1);
-  if (numPixels != numElements(cube2)) {
+  numPixels = num_elements(cube1);
+  if (numPixels != num_elements(cube2)) {
     mexErrMsgTxt("cube_diff_sse: both arguments must have same number of elements");
   }
 

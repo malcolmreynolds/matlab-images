@@ -47,7 +47,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_IS_UINT8(im,0);
   ASSERT_IS_DOUBLE(amask,1);
 
-  if (!imageSizeMatchesMask(im,amask)) {
+  if (!image_size_matches_mask(im,amask)) {
     char msgbuf[ERR_MSG_SIZE];
     sprintf(msgbuf,"%s:%d image and mask size do not match!",__FILE__,__LINE__);
     mexErrMsgTxt(msgbuf);
@@ -87,7 +87,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   cubePtr = mxGetPr(plhs[0]);
 
   rPtr = (unsigned char *)mxGetPr(im);
-  numPixels = numElements(amask);
+  numPixels = num_elements(amask);
   gPtr = rPtr + numPixels;
   bPtr = rPtr + (2*numPixels);
 

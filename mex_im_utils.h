@@ -4,8 +4,10 @@
 #include "mex.h"
 
 //These functions are found in mex_im_utils.c
-unsigned int numElements(const mxArray* array);
-unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask);
+unsigned int num_elements(const mxArray* array);
+unsigned int image_size_matches_mask(const mxArray* im, const mxArray* mask);
+void normalise_array(const mxArray* src, mxArray* dest);
+void normalise_array_inplace(mxArray* array, double val);
 
 //*****************************
 // Macros to check number of arguments etc.
@@ -91,11 +93,13 @@ unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask);
 
 #define ASSERT_SCALAR(array,argnum)					\
   do {									\
-    if (numElements(array) != 1) {				\
+    if (num_elements(array) != 1) {				\
       char msgbuf[ERR_MSG_SIZE];					\
       sprintf(msgbuf,"%s:%d argument number %d must be a single number.", \
 	      __FILE__,__LINE__,argnum);				\
       mexErrMsgTxt(msgbuf);						\
     } } while(0)
+
+
 
 #endif

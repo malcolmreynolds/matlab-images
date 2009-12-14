@@ -19,7 +19,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_IS_DOUBLE(prhs[0],0);
     
   cube = prhs[0];
-  numPixels = numElements(cube);
+  numPixels = num_elements(cube);
   cubeData = mxGetPr(cube);
 
   total = 0.0;
