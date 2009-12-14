@@ -91,8 +91,7 @@ unsigned int imageSizeMatchesMask(const mxArray* im, const mxArray* mask);
 
 #define ASSERT_SCALAR(array,argnum)					\
   do {									\
-    if (mxGetNumberOfDimensions(array) > 1 ||				\
-	mxGetDimensions(array)[0] != 1) {				\
+    if (numElements(array) != 1) {				\
       char msgbuf[ERR_MSG_SIZE];					\
       sprintf(msgbuf,"%s:%d argument number %d must be a single number.", \
 	      __FILE__,__LINE__,argnum);				\

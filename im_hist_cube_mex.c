@@ -25,6 +25,9 @@ double* cubePtr;
 unsigned char *rPtr;
 unsigned char *gPtr;
 unsigned char *bPtr;
+unsigned int numPixels, i;
+unsigned char r, g, b;
+double a, total_alpha;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_NUM_RHS_ARGS_EQUALS(2);
@@ -51,19 +54,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   rPtr = (unsigned char *)mxGetPr(im);
   // the total elements of the mask is one third of the elements in the full image, so 
   // skip forward by this amount to get to the next channel.
-  unsigned int numPixels = numElements(amask);
+  numPixels = numElements(amask);
   //  mexPrintf("%d pixels\n",numPixels);
   gPtr = rPtr + numPixels;
   bPtr = rPtr + (2*numPixels);
 
   //setup the alpha mask
   aMaskPtr = mxGetPr(amask);
-
-  // this is the only bit that actually contains the algorithm
-  unsigned int i;
-  unsigned char r, g, b;
-  double a;
-  double total_alpha = 0.0;
+  total_alpha = 0.0;
 
   for (i=0; i<numPixels; i++) {
     //get alpha value and colours
