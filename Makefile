@@ -4,9 +4,14 @@ allmex: im_hist_cube_res.mexmaci  \
 				im_hist_cube_mex.mexmaci \
 				cube_sse_unsafe.mexmaci \
 				norm_cube.mexmaci \
-				thresh_cubes.mexmaci
+				thresh_cubes.mexmaci \
+				thresh_cubes_binary.mexmaci
 
 LIBS = mex_im_utils.o
+
+#special case here
+thresh_cubes_binary.mexmaci: thresh_cubes.c $(LIBS)
+	mex CFLAGS='$$CFLAGS -Wall -std=c99 -DUINT_MASK' -o $@ thresh_cubes.c $(LIBS)
 
 #for now, assume all the files are dependent on all the libs (only 1 anyway...)
 %.mexmaci : %.c $(LIBS)
