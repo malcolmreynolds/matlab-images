@@ -42,10 +42,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   amask = prhs[1];
   resolution = prhs[2];
 
-  ASSERT_HAS_3_CHANNELS(im,0);
-  ASSERT_2D_ARRAY(amask,1);
-  ASSERT_IS_UINT8(im,0);
-  ASSERT_IS_DOUBLE(amask,1);
+  ASSERT_HAS_3_CHANNELS(im);
+  ASSERT_2D_ARRAY(amask);
+  ASSERT_IS_UINT8(im);
+  ASSERT_IS_DOUBLE(amask);
 
   if (!image_size_matches_mask(im,amask)) {
     char msgbuf[ERR_MSG_SIZE];
@@ -57,7 +57,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   /* mexPrintf("mxGetDimensions(resolution)[0] = %d\n",mxGetDimensions(resolution)[0]); */
   /* mexPrintf("mxGetDimensions(resolution)[1] = %d\n",mxGetDimensions(resolution)[1]); */
 
-  ASSERT_SCALAR(resolution,2);
+  ASSERT_SCALAR(resolution);
   // get the resolution and assert it is one of our supported values.
   // Also work out how much to right shift the 8 bit values by to index
   // into the array.

@@ -18,17 +18,12 @@ unsigned int i;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_NUM_RHS_ARGS_EQUALS(2);
+  ASSERT_IS_DOUBLE(prhs[0]);
+  ASSERT_IS_DOUBLE(prhs[1]);
+  ASSERT_SAME_SIZE(prhs[0],prhs[1]);
 
   cube1 = prhs[0];
   cube2 = prhs[1];
-
-  ASSERT_IS_DOUBLE(cube1,0);
-  ASSERT_IS_DOUBLE(cube2,1);
-
-  numPixels = num_elements(cube1);
-  if (numPixels != num_elements(cube2)) {
-    mexErrMsgTxt("cube_diff_sse: both arguments must have same number of elements");
-  }
 
   c1ptr = mxGetPr(cube1);
   c2ptr = mxGetPr(cube2);

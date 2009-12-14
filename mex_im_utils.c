@@ -59,7 +59,7 @@ void normalise_array(const mxArray* src, mxArray* dest) {
 
 //Normalise an array in place by dividing each element by a certain value
 void normalise_array_inplace(mxArray* array, double val) {
-  ASSERT_IS_DOUBLE(array,0);
+  ASSERT_IS_DOUBLE(array);
   unsigned int i;
   unsigned int num_pixels = num_elements(array);
 

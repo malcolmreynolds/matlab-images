@@ -34,10 +34,10 @@ OUTPUT_PTR_TYPE output;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_NUM_RHS_ARGS_EQUALS(3);
-  ASSERT_IS_DOUBLE(prhs[0],0);
-  ASSERT_IS_DOUBLE(prhs[1],1);
+  ASSERT_IS_DOUBLE(prhs[0]);
+  ASSERT_IS_DOUBLE(prhs[1]);
   ASSERT_SAME_SIZE(prhs[0],prhs[1]);
-  ASSERT_SCALAR(prhs[2],2);
+  ASSERT_SCALAR(prhs[2]);
 
   //create destination
   plhs[0] = mxCreateNumericArray(mxGetNumberOfDimensions(prhs[0]),

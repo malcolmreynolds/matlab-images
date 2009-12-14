@@ -13,7 +13,7 @@ unsigned int i, numPixels;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_NUM_RHS_ARGS_EQUALS(1);
-  ASSERT_IS_DOUBLE(prhs[0],0);
+  ASSERT_IS_DOUBLE(prhs[0]);
 
   // create the destination matrix
   plhs[0] = mxCreateNumericArray(mxGetNumberOfDimensions(prhs[0]),

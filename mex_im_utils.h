@@ -58,50 +58,50 @@ inline double max(double d1, double d2) {
 //Macros to check type of args
 
 // Assert the third dimension of an array is of size 3 (as in, an RGB image)
-#define ASSERT_HAS_3_CHANNELS(array,argnum)				\
+#define ASSERT_HAS_3_CHANNELS(array)					\
   do {									\
     if (mxGetNumberOfDimensions(array) != 3 ||				\
 	mxGetDimensions(array)[2] != 3) {				\
       char msgbuf[ERR_MSG_SIZE];					\
-      sprintf(msgbuf,"%s:%d argument number %d should have 3 channels.",\
-	      __FILE__,__LINE__,argnum);				\
+      sprintf(msgbuf,"%s:%d argument should have 3 channels.",		\
+	      __FILE__,__LINE__);					\
       mexErrMsgTxt(msgbuf);						\
     } } while(0)
 
 
-#define ASSERT_2D_ARRAY(array,argnum)					\
+#define ASSERT_2D_ARRAY(array)						\
   do {									\
     if (mxGetNumberOfDimensions(array) != 2) {				\
       char msgbuf[ERR_MSG_SIZE];					\
-      sprintf(msgbuf,"%s:%d argument number %d should be 2 dimensional.",\
-	      __FILE__,__LINE__,argnum);				\
+      sprintf(msgbuf,"%s:%d argument should be 2 dimensional.",		\
+	      __FILE__,__LINE__);					\
       mexErrMsgTxt(msgbuf);						\
     } } while(0) 
 
-#define ASSERT_IS_UINT8(array,argnum)					\
+#define ASSERT_IS_UINT8(array)						\
   do {									\
     if (!mxIsUint8(array)) {						\
       char msgbuf[ERR_MSG_SIZE];					\
-      sprintf(msgbuf,"%s:%d argument number %d must be of type Uint8.",	\
-	      __FILE__,__LINE__,argnum);				\
+      sprintf(msgbuf,"%s:%d argument must be of type Uint8.",		\
+	      __FILE__,__LINE__);					\
       mexErrMsgTxt(msgbuf);						\
     } } while(0)
 
-#define ASSERT_IS_DOUBLE(array,argnum)					\
+#define ASSERT_IS_DOUBLE(array)						\
   do {									\
     if (!mxIsDouble(array)) {						\
       char msgbuf[ERR_MSG_SIZE];					\
-      sprintf(msgbuf,"%s:%d argument number %d must be of type Double.", \
-	      __FILE__,__LINE__,argnum);				\
+      sprintf(msgbuf,"%s:%d argument must be of type Double.",		\
+	      __FILE__,__LINE__);					\
       mexErrMsgTxt(msgbuf);						\
     } } while(0)
 
-#define ASSERT_SCALAR(array,argnum)					\
+#define ASSERT_SCALAR(array)						\
   do {									\
-    if (num_elements(array) != 1) {				\
+    if (num_elements(array) != 1) {					\
       char msgbuf[ERR_MSG_SIZE];					\
-      sprintf(msgbuf,"%s:%d argument number %d must be a single number.", \
-	      __FILE__,__LINE__,argnum);				\
+      sprintf(msgbuf,"%s:%d argument must be a single number.",		\
+	      __FILE__,__LINE__);					\
       mexErrMsgTxt(msgbuf);						\
     } } while(0)
 

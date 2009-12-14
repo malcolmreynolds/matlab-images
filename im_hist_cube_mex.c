@@ -37,10 +37,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   im = prhs[0];
   amask = prhs[1];
   
-  ASSERT_HAS_3_CHANNELS(im,0);
-  ASSERT_2D_ARRAY(amask,1);
-  ASSERT_IS_UINT8(im,0);
-  ASSERT_IS_DOUBLE(amask,1);
+  ASSERT_HAS_3_CHANNELS(im);
+  ASSERT_2D_ARRAY(amask);
+  ASSERT_IS_UINT8(im);
+  ASSERT_IS_DOUBLE(amask);
  
   if (!image_size_matches_mask(im,amask)) {
     mexErrMsgTxt("im_hist_cube_mex image and mask size do not match!");
