@@ -15,18 +15,10 @@ unsigned int numPixels;
 unsigned int i;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
-
-  if (nrhs != 1) {
-    mexErrMsgTxt("cube_sse_unsafe: expects 1 argument");
-  }
-  
+  ASSERT_NUM_RHS_ARGS_EQUALS(1);
+  ASSERT_IS_DOUBLE(prhs[0],0);
+    
   cube = prhs[0];
-
-  if (!mxIsDouble(cube)) {
-    mexErrMsgTxt("cube_sse_unsafe: expects argument of type double");
-  }
-
-  
   numPixels = numElements(cube);
   cubeData = mxGetPr(cube);
 

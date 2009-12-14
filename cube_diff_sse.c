@@ -17,16 +17,13 @@ unsigned int numPixels;
 unsigned int i;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
-  if (nrhs != 2) {
-    mexErrMsgTxt("cube_diff_sse: expects 2 arguments");
-  }
+  ASSERT_NUM_RHS_ARGS_EQUALS(2);
 
   cube1 = prhs[0];
   cube2 = prhs[1];
 
-  if (!mxIsDouble(cube1) || !mxIsDouble(cube2)) {
-    mexErrMsgTxt("cube_diff_sse: both arguments must be double.");
-  }
+  ASSERT_IS_DOUBLE(cube1,0);
+  ASSERT_IS_DOUBLE(cube2,1);
 
   numPixels = numElements(cube1);
   if (numPixels != numElements(cube2)) {
