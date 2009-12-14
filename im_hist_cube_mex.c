@@ -22,6 +22,9 @@ const mxArray* im;
 const mxArray* amask;
 double* aMaskPtr;
 double* cubePtr;
+unsigned char *rPtr;
+unsigned char *gPtr;
+unsigned char *bPtr;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_NUM_RHS_ARGS_EQUALS(2);
@@ -39,12 +42,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   if (!imageSizeMatchesMask(im,amask)) {
     mexErrMsgTxt("im_hist_cube_mex image and mask size do not match!");
   }
- 
-  //at this point I think we are sorted in terms of checking the input. Now create
-  //pointers to go over the red, green and blue channels.
-  unsigned char *rPtr;
-  unsigned char *gPtr;
-  unsigned char *bPtr;
 
   //create the 256x256x256 cube
   plhs[0] = mxCreateNumericArray(3,DIMENSIONS,mxDOUBLE_CLASS,mxREAL);
