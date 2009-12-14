@@ -9,6 +9,11 @@ unsigned int image_size_matches_mask(const mxArray* im, const mxArray* mask);
 void normalise_array(const mxArray* src, mxArray* dest);
 void normalise_array_inplace(mxArray* array, double val);
 
+//inline utils
+inline double max(double d1, double d2) {
+  return (d1 > d2) ? d1 : d2;
+}
+
 //*****************************
 // Macros to check number of arguments etc.
 
@@ -98,6 +103,29 @@ void normalise_array_inplace(mxArray* array, double val);
       sprintf(msgbuf,"%s:%d argument number %d must be a single number.", \
 	      __FILE__,__LINE__,argnum);				\
       mexErrMsgTxt(msgbuf);						\
+    } } while(0)
+
+//Check that two arrays have the exact same dimensionality.
+#define ASSERT_SAME_SIZE(array1,array2)					\
+  do {									\
+    const mwSize c1nd = mxGetNumberOfDimensions(array1);		\
+    const mwSize c2nd = mxGetNumberOfDimensions(array2);		\
+    if (c1nd != c2nd) {							\
+      char msgbuf[ERR_MSG_SIZE];					\
+      sprintf(msgbuf,"%s:%d arrays are not same size! %d dims vs %d dims!", \
+	      __FILE__,__LINE__,c1nd,c2nd);				\
+      mexErrMsgTxt(msgbuf);						\
+    }									\
+    const mwSize* dims1 = mxGetDimensions(array1);			\
+    const mwSize* dims2 = mxGetDimensions(array2);			\
+    unsigned int i;							\
+    for (i=0; i<c1nd; i++) {						\
+      if (dims1[i] != dims2[i]) {					\
+	char msgbuf[ERR_MSG_SIZE];					\
+	sprintf(msgbuf,"%s:%d array1 dim %d = %d, array2 dim %d = %d",	\
+		__FILE__,__LINE__,i,dims1[i],i,dims2[i]);		\
+	mexErrMsgTxt(msgbuf);						\
+      }									\
     } } while(0)
 
 
