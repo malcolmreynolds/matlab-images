@@ -29,14 +29,19 @@
 
 unsigned int numPixels, i;
 double *p1, *p2;
-double diff, max_diff, threshold;
+double new_diff, max_diff, this_diff, threshold, factor, p1val, p2val;
 OUTPUT_PTR_TYPE output;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
+
+  mexErrMsgTxt("This function is parked because I think it's fucked in some way. Use matlab version for moment.\n");
+
   ASSERT_NUM_RHS_ARGS_EQUALS(3);
+  //FIRST TWO ARGS SHOULD BE UINT8!!!
   ASSERT_IS_DOUBLE(prhs[0]);
   ASSERT_IS_DOUBLE(prhs[1]);
   ASSERT_SAME_SIZE(prhs[0],prhs[1]);
+  ASSERT_IS_DOUBLE(prhs[2]);
   ASSERT_SCALAR(prhs[2]);
 
   //create destination
@@ -50,21 +55,29 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   p2 = mxGetPr(prhs[1]);
   max_diff = 0.0;
   for (i=0; i<numPixels; i++) {
-    diff = abs(*p1++ - *p2++);
-    max_diff = max(diff,max_diff);
+    p1val = *p1++;
+    p2val = *p2++;
+    new_diff = abs(p1val - p2val);
+    mexPrintf("p1=%e p2=%e diff=%e max_diff=%e\n",p1val,p2val,new_diff,max_diff);
+    if (new_diff > max_diff) {
+      max_diff = new_diff;
+    }
   }
 
   // get the parameter which says what proportion of max diff will be
   // the threshold and calculate this limit
-  threshold = *(mxGetPr(prhs[2])) * max_diff;
+  factor = *(mxGetPr(prhs[2]));
+  threshold = factor * max_diff;
+  mexPrintf("max=%e factor=%e threshold=%e\n",max_diff,factor,threshold);
 
   p1 = mxGetPr(prhs[0]);
   p2 = mxGetPr(prhs[1]);
   output = (OUTPUT_PTR_TYPE)mxGetPr(plhs[0]);
 
   for (i=0; i<numPixels; i++) {
-    diff = abs(*p1++ - *p2++);
-    if (diff > threshold) {
+    this_diff = abs(*p1++ - *p2++);
+    if (this_diff > threshold) {
+      mexPrintf("entry %d is %e, above thresh\n",i,this_diff);
       *output++ = ABOVE_THRESH;
     } else {
       *output++ = BELOW_THRESH;
