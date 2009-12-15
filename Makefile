@@ -1,11 +1,12 @@
 
 allmex: im_hist_cube_res.mexmaci  \
-				cube_diff_sse.mexmaci \
-				im_hist_cube_mex.mexmaci \
-				cube_sse_unsafe.mexmaci \
-				norm_cube.mexmaci \
-				thresh_cubes.mexmaci \
-				thresh_cubes_binary.mexmaci
+	cube_diff_sse.mexmaci \
+	im_hist_cube_mex.mexmaci \
+	cube_sse_unsafe.mexmaci \
+	norm_cube.mexmaci \
+	thresh_cubes.mexmaci \
+	thresh_cubes_binary.mexmaci \
+	cube_diff_thresh.mexmaci
 
 LIBS = mex_im_utils.o
 

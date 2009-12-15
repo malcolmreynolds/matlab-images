@@ -32,11 +32,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   total = 0.0;
   for (i=0; i<numPixels; i++) {
     val = (*c1ptr - *c2ptr);
+    //mexPrintf("val=%e\n",val);
     total += val * val;
     c1ptr++;
     c2ptr++;
   }
 
+  mexPrintf("final sse=%d\n",total);
   plhs[0] = mxCreateDoubleScalar(total);
 }
     

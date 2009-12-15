@@ -69,8 +69,4 @@ void normalise_array_inplace(mxArray* array, double val) {
     *p++ /= val;
   }
 }
-  
-inline double asdfabs(double d) {
-  return (d > 0.0) ? d : -d;
-}
- 
+   
