@@ -18,7 +18,7 @@ if nargin == 2,
   transform = 'rgb'; % default, means we don't do a transform
 end
 
-numpixels = prod(size(A));
+numpixels = prod(size(A))
 
 %get our reshaped images and mask, setup bins
 A_vec = reshape(A,1,numpixels);
@@ -78,6 +78,7 @@ for p=1:numpixels,
       hl2bin(im_chan_2(p) + off2) + amt;
   hl3bin(im_chan_3(p) + off3) = ...
       hl3bin(im_chan_3(p) + off3) + amt;
+  %fprintf('pix %d alpha is %f\n',p,amt);
 end
 
 total_alpha = sum(A_vec);

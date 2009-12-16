@@ -1,9 +1,15 @@
 function draw3hist(hist,the_title)
 
-plot(hist.lines{1}.x,hist.lines{1}.bins,'r');
+%only support maximum of 4 lines right now
+colours = {'r','g','b','k'};
+
 hold on;
-plot(hist.lines{2}.x,hist.lines{2}.bins,'g');
-plot(hist.lines{3}.x,hist.lines{3}.bins,'b');
-legend(hist.lines{1}.lab, hist.lines{2}.lab, hist.lines{3}.lab);
+labels = cell(0,1);
+for l=1:length(hist.lines),
+  plot(hist.lines{l}.x,hist.lines{l}.bins,colours{l});
+  labels = [labels hist.lines{l}.lab];
+end
+
+legend(labels);
 title(the_title);
 hold off;
