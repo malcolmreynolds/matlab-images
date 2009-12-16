@@ -87,6 +87,15 @@ inline double max(double d1, double d2) {
       mexErrMsgTxt(msgbuf);						\
     } } while(0)
 
+#define ASSERT_IS_UINT32(array)					\
+  do {								\
+    if (!mxIsInt32(array)) {					\
+      char msgbuf[ERR_MSG_SIZE];				\
+      sprintf(msgbuf,"%s:%d argument must be of type Uint32",	\
+	      __FILE__,__LINE__);				\
+      mexErrMsgTxt(msgbuf);					\
+    } } while(0)
+
 #define ASSERT_IS_DOUBLE(array)						\
   do {									\
     if (!mxIsDouble(array)) {						\
@@ -128,6 +137,70 @@ inline double max(double d1, double d2) {
       }									\
     } } while(0)
 
+//Assert that the dimensions are correct for mask to be an alpha mask on
+// the image 'image', which can have 2 or 3 channels
+#define ASSERT_IMAGE_AND_MASK(image,mask)				\
+do {									\
+  const mwSize im_nd = mxGetNumberOfDimensions(image);			\
+  const mwSize mask_nd = mxGetNumberOfDimensions(mask);			\
+  if ((im_nd != 2) && (im_nd != 3)) {					\
+    char msgbuf[ERR_MSG_SIZE];						\
+    sprintf("%s:%d 'image' has %d dimensions",				\
+	    __FILE__,__LINE__,im_nd);					\
+    mexErrMsgTxt(msgbuf);						\
+  }									\
+  else if (mask_nd != 2) {						\
+    char msgbuf[ERR_MSG_SIZE];                                          \ 
+    sprintf("%s:%d mask doesn't have 2 dimensions",			\	
+	    __FILE__,__LINE__);						\
+    mexErrMsgTxt(msgbuf);						\	
+  }									\
+  const mwSize* im_dims = mxGetDimensions(image);			\	
+  const mwSize* mask_dims = mxGetDimensions(mask);			\
+  if (im_dims[0] != mask_dims[0]) {					\
+    char msgbuf[ERR_MSG_SIZE];						\
+    sprintf("%s:%d image first dim=%d, mask first dim=%d",		\
+	    __FILE__,__LINE__,im_dims[0],mask_dims[0]);			\
+    mexErrMsgTxt(msgbuf);						\	
+  }									\
+  else if (im_dims[1] != mask_dims[1]) {				\	
+    char msgbuf[ERR_MSG_SIZE];						\
+    sprintf("%s:%d image second dim=%d, mask second dim=%d",		\
+	    __FILE__,__LINE__,im_dims[1],mask_dims[1]);			\
+    mexErrMsgTxt(msgbuf);						\
+  }									\
+} while(0)
+    
+    
+//As above but also asserts that the image has 3 channels
+#define ASSERT_FULL_IMAGE_AND_MASK(image,mask)	\
+    ASSERT_IMAGE_AND_MASK(image,mask);					\
+    do {								\
+      const mwSize numd = mxGetNumberOfDimensions(image);		\
+      if (numd != 3) {							\
+	char msgbuf[ERR_MSG_SIZE];					\
+	sprintf("%s:%d image has dimensionality %d, != 3",		\
+		__FILE__,__LINE__,numd);				\
+	mexErrMsgTxt(msgbuf);						\
+      }									\
+      const mwSize* im_dims = mxGetDimensions(image);			\
+      if (im_dims[2] != 3) {						\
+	char msgbug[ERR_MSG_SIZE];					\
+	sprintf("%s:%d size of image's 3rd dimension is %d, expecting 3!", \
+		__FILE__,__LINE__,im_dims[2]);				\
+	mexErrMsgTxt(msgbuf);						\
+      }									\
+    } while (0)
+
+//Get an unsigned int from an mxArray. Most useful when the mxArray represents a scalar.
+#define SCALAR_GET_DOUBLE(array) *((double *)mxGetPr(array))
+#define SCALAR_GET_UINT32(array) *((unsigned int *)mxGetPr(array))
+#define SCALAR_GET_SINT32(array) *((signed int *)mxGetPr(array))
+
+
+
 
 
 #endif
+
+
