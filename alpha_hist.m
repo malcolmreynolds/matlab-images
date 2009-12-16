@@ -14,7 +14,7 @@ elseif max(max(A)) > 1,
   warning('alpha_hist:amaskValuesTooLarge','alpha mask contains values greater than 1!');
 end
 
-if isempty(transform),
+if nargin == 2,
   transform = 'rgb'; % default, means we don't do a transform
 end
 
@@ -28,16 +28,26 @@ A_vec = reshape(A,1,numpixels);
 %the bins.
 switch transform
  case 'rgb'
-  hist.lines{1} = {'r', 0:255, zeros(1,256),0};
-  hist.lines{2} = {'g', 0:255, zeros(1,256),0};
-  hist.lines{3} = {'b', 0:255, zeros(1,256),0};
-  hist.meta = 'rgb histogram'; 
+  %use of temporary variable l is really to make things look nice
+  %and cleaner.
+  l.lab='r'; l.x = 0:255; l.bins = zeros(1,256); l.offs = 1;
+  hist.lines{1} = l;
+  l.lab='g'; l.x = 0:255; l.bins = zeros(1,256); l.offs = 1;
+  hist.lines{2} = l;
+  l.lab='b'; l.x = 0:255; l.bins = zeros(1,256); l.offs = 1;
+  hist.lines{3} = l;
+  hist.meta = 'rgb histogram';
+  hist.tag = 'rgb'; %tells the plotting function how to act
  case 'RGB->lab'
   Im = colorspace(transform,Im);
-  hist.lines{1} = {'l',  0:100,zeros(1,101),1};
-  hist.lines{2} = {'a^*',-100:1:100,zeros(1,201),101};
-  hist.lines{3} = {'b^*',-100:1:100,zeros(1,201),101};
+  l.lab='L';   l.x = 0:100; l.bins = zeros(1,101); l.offs = 1;
+  hist.lines{1} = l;
+  l.lab='a^*'; l.x = -100:1:100; l.bins = zeros(1,201); l.offs = 101;
+  hist.lines{2} = l;
+  l.lab='b^*'; l.x = -100:1:100; l.bins = zeros(1,201); l.offs = 101;
+  hist.lines{3} = l;
   hist.meta = 'CIE 1976 (L^*, a^*, b^*) histogram';
+  hist.tag = 'lab';
  otherwise
   error('unsupported transform %s',transform);
 end
@@ -46,31 +56,35 @@ end
 im_chan_1 = round(double(reshape(Im(:,:,1),1,numpixels)));
 im_chan_2 = round(double(reshape(Im(:,:,2),1,numpixels)));
 im_chan_3 = round(double(reshape(Im(:,:,3),1,numpixels)));
-hl1 = hist.lines{1};
-hl2 = hist.lines{2};
-hl3 = hist.lines{3};
+
+
+hl1bin = hist.lines{1}.bins;
+hl2bin = hist.lines{2}.bins;
+hl3bin = hist.lines{3}.bins;
+off1 = hist.lines{1}.offs;
+off2 = hist.lines{2}.offs;
+off3 = hist.lines{3}.offs;
 
 %for the colour ranges which go negative, we need to cope with this
-offsets = [hl1{4}, hl2{4}, hl3{4}];
 for p=1:numpixels,
   
   amt = A_vec(p);
   
   %yeah, who needs the += operator when we have this kind of
   %fearful conciseness going on.
-  hl1{3}(im_chan_1(p)+offsets(1)) = ...
-      hl1{3}(im_chan_1(p)+offsets(1)) + amt;
-  hl2{3}(im_chan_2(p)+offsets(2)) = ...
-      hl2{3}(im_chan_2(p)+offsets(2)) + amt;
-  hl3{3}(im_chan_3(p)+offsets(3)) = ...
-      hl3{3}(im_chan_3(p)+offsets(3)) + amt;
+  hl1bin(im_chan_1(p) + off1) = ...
+      hl1bin(im_chan_1(p) + off1) + amt;
+  hl2bin(im_chan_2(p) + off2) = ...
+      hl2bin(im_chan_2(p) + off2) + amt;
+  hl3bin(im_chan_3(p) + off3) = ...
+      hl3bin(im_chan_3(p) + off3) + amt;
 end
 
 total_alpha = sum(A_vec);
 
 %normalise by number of pixels
-hl1{3} = hl1{3} ./ total_alpha;
-hl2{3} = hl2{3} ./ total_alpha;
-hl3{3} = hl3{3} ./ total_alpha;
+hist.lines{1}.bins = hl1bin ./ total_alpha;
+hist.lines{2}.bins = hl2bin ./ total_alpha;
+hist.lines{3}.bins = hl3bin ./ total_alpha;
 
 
