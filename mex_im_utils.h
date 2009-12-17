@@ -170,7 +170,7 @@ do {									\
   if (im_dims[0] != mask_dims[0]) {					\
     char msgbuf[ERR_MSG_SIZE];						\
     sprintf(msgbuf,"%s:%d image first dim=%d, mask first dim=%d",	\
-	    __FILE__,__LINE__,im_dims[0],mask_dims[0]);				\
+	    __FILE__,__LINE__,im_dims[0],mask_dims[0]);			\
     mexErrMsgTxt(msgbuf);						\
   }									\
   else if (im_dims[1] != mask_dims[1]) {				\
