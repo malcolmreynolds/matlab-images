@@ -38,7 +38,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     c2ptr++;
   }
 
-  mexPrintf("final sse=%d\n",total);
+  //mexPrintf("final sse=%d\n",total);
   plhs[0] = mxCreateDoubleScalar(total);
 }
     

@@ -8,8 +8,6 @@ function hist = alpha_hist(Im,A,transform)
 %fractional. Im must be uint8! Transform, if present, gives some
 %transform that should be done with colorspace.m before doing the conversion.
 
-USING_MEX = true;
-
 if (size(Im,3) ~= 3),
   error('alpha_hist:numberOfSamples', 'Input image must be RGB');
 elseif (length(size(A)) ~= 2),
