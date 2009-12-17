@@ -57,6 +57,8 @@ end
 %inside C!!!
 
 if USING_MEX,
+  
+  fprintf('using mex\n');
 
   for c=1:3,
     hist.lines{c}.bins = alpha_hist_1d_mex(sint32(Im(:,:,c)), ...
@@ -66,6 +68,8 @@ if USING_MEX,
   end
   
 else %slower matlab version
+  
+  fprintf('using matlab version\n');
   
   %put each channel into a long vector, convert to doubles and round
   im_chan_1 = round(double(reshape(Im(:,:,1),1,numpixels)));
