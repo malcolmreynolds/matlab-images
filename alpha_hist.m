@@ -20,7 +20,7 @@ if nargin == 2,
   transform = 'rgb'; % default, means we don't do a transform
 end
 
-numpixels = prod(size(A))
+numpixels = prod(size(A));
 
 %get our reshaped images and mask, setup bins
 A_vec = reshape(A,1,numpixels);
