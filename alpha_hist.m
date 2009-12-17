@@ -4,7 +4,7 @@ function hist = alpha_hist(Im,A,transform)
 %fractional. Im must be uint8! Transform, if present, gives some
 %transform that should be done with colorspace.m before doing the conversion.
 
-USING_MEX = true;
+USING_MEX = false;
 
 if (size(Im,3) ~= 3),
   error('alpha_hist:numberOfSamples', 'Input image must be RGB');
@@ -62,11 +62,14 @@ if USING_MEX,
   
   fprintf('using mex\n');
 
+  imsint32 = int32(Im);
   for c=1:3,
-    hist.lines{c}.bins = alpha_hist_mex(int32(Im(:,:,c)), ...
-                                           double(A),...
-                                           uint32(hist.lines{c}.offs), ...
-                                           uint32(length(hist.lines{c}.x)));
+    %we now pass the full image, plus offset and length parameters
+    hist.lines{c}.bins = alpha_hist_mex(imsint32,uint32((c-1)*numpixels),...
+                                        uint32(numpixels), ...
+                                        double(A),...
+                                        uint32(hist.lines{c}.offs), ...
+                                        uint32(length(hist.lines{c}.x)));
   end
   
 else %slower matlab version
