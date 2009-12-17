@@ -1,4 +1,4 @@
-function hist = alpha_hist(Im,A,transform)
+function hist = alpha_hist_old_and_slow(Im,A,transform)
 % parked function. This has now been superceded by alpha_hist which always
 % passes through to alpha_hist_mex.c - this is just left as a reference to
 % the more principalled but slow and crappy way.
@@ -8,7 +8,7 @@ function hist = alpha_hist(Im,A,transform)
 %fractional. Im must be uint8! Transform, if present, gives some
 %transform that should be done with colorspace.m before doing the conversion.
 
-USING_MEX = true;
+USING_MEX = false;
 
 if (size(Im,3) ~= 3),
   error('alpha_hist:numberOfSamples', 'Input image must be RGB');
@@ -31,8 +31,7 @@ A_vec = reshape(A,1,numpixels);
  
 %here we setup each line. each struct contains a label identifying
 %what the line signifies, then the x range, then the y range (ie
-%the bins. Note all the offsets here are setup for matlab ie arrays
-%that start at zero. the C function decrements to take care of this.
+%the bins.
 switch transform
  case 'rgb'
   %use of temporary variable l is really to make things look nice
@@ -59,15 +58,63 @@ switch transform
   error('unsupported transform %s',transform);
 end
 
-imsint32 = int32(Im);
-for c=1:3,
-  %we now pass the full image, plus offset and length parameters
-  hist.lines{c}.bins = alpha_hist_mex(imsint32,uint32((c-1)*numpixels),...
-                                      uint32(numpixels), ...
-                                      double(A),...
-                                      uint32(hist.lines{c}.offs), ...
-                                      uint32(length(hist.lines{c}.x)));
-end
+%if I was calling out to C, I would do it just here
+%note the offset passed is for matlab version - subtract 1 once
+%inside C!!!
+
+if USING_MEX,
   
+  fprintf('using mex\n');
+
+  imsint32 = int32(Im);
+  for c=1:3,
+    %we now pass the full image, plus offset and length parameters
+    hist.lines{c}.bins = alpha_hist_mex(imsint32,uint32((c-1)*numpixels),...
+                                        uint32(numpixels), ...
+                                        double(A),...
+                                        uint32(hist.lines{c}.offs), ...
+                                        uint32(length(hist.lines{c}.x)));
+  end
+  
+else %slower matlab version
+  
+  fprintf('using matlab version\n');
+  
+  %put each channel into a long vector, convert to doubles and round
+  im_chan_1 = round(double(reshape(Im(:,:,1),1,numpixels)));
+  im_chan_2 = round(double(reshape(Im(:,:,2),1,numpixels)));
+  im_chan_3 = round(double(reshape(Im(:,:,3),1,numpixels)));
+  
+  
+  hl1bin = zeros(1,length(hist.lines{1}.x));
+  hl2bin = zeros(1,length(hist.lines{2}.x));
+  hl3bin = zeros(1,length(hist.lines{3}.x));
+  off1 = hist.lines{1}.offs;
+  off2 = hist.lines{2}.offs;
+  off3 = hist.lines{3}.offs;
+ 
+  for p=1:numpixels,
+    
+    amt = A_vec(p);
+    
+    %yeah, who needs the += operator when we have this kind of
+    %fearful conciseness going on.
+    hl1bin(im_chan_1(p) + off1) = ...
+        hl1bin(im_chan_1(p) + off1) + amt;
+    hl2bin(im_chan_2(p) + off2) = ...
+        hl2bin(im_chan_2(p) + off2) + amt;
+    hl3bin(im_chan_3(p) + off3) = ...
+        hl3bin(im_chan_3(p) + off3) + amt;
+    %fprintf('pix %d alpha is %f\n',p,amt);
+  end
+  
+  total_alpha = sum(A_vec);
+  
+  %normalise by number of pixels
+  hist.lines{1}.bins = hl1bin ./ total_alpha;
+  hist.lines{2}.bins = hl2bin ./ total_alpha;
+  hist.lines{3}.bins = hl3bin ./ total_alpha;
+  
+end
   
   
