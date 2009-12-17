@@ -6,7 +6,8 @@ allmex: im_hist_cube_res.mexmaci  \
 	norm_cube.mexmaci \
 	thresh_cubes.mexmaci \
 	thresh_cubes_binary.mexmaci \
-	cube_diff_thresh.mexmaci
+	cube_diff_thresh.mexmaci \
+	alpha_hist_mex.mexmaci
 
 LIBS = mex_im_utils.o
 

@@ -22,7 +22,7 @@ unsigned int offset, histlength, numpixels, i;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_NUM_RHS_ARGS_EQUALS(4);
-  
+   
   ASSERT_IMAGE_AND_MASK(prhs[0],prhs[1]);
   ASSERT_IS_SINT32(prhs[0]);
   ASSERT_IS_DOUBLE(prhs[1]);
@@ -39,12 +39,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
   //create output histogram
   plhs[0] = mxCreateNumericMatrix(1,histlength,mxDOUBLE_CLASS,mxREAL);
-  histptr = (double *)getMxPr(plhs[0]);
+  histptr = (double *)mxGetPr(plhs[0]);
 
   // in future maybe we just use offset and length into data..
   numpixels = num_elements(im);
   dataptr = (signed int *)mxGetPr(im);
-  amaskptr = (double *)mxGetPtr(amask);
+  amaskptr = (double *)mxGetPr(amask);
   total_alpha = 0.0;
   for (i=0; i<numpixels; i++) {
     dataval = *dataptr++;
@@ -63,5 +63,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     if (aval == 0.0) continue;
     
     histptr[dataval] += aval;
+    total_alpha += aval;
+  }
+
+  //now we need to normalise
+  for (i=0; i<histlength; i++) {
+    *histptr++ /= total_alpha;
   }
 }

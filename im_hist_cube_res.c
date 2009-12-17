@@ -57,7 +57,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   /* mexPrintf("mxGetDimensions(resolution)[0] = %d\n",mxGetDimensions(resolution)[0]); */
   /* mexPrintf("mxGetDimensions(resolution)[1] = %d\n",mxGetDimensions(resolution)[1]); */
 
-  ASSERT_SCALAR(resolution);
+  ASSERT_IS_SCALAR(resolution);
   // get the resolution and assert it is one of our supported values.
   // Also work out how much to right shift the 8 bit values by to index
   // into the array.

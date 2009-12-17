@@ -42,7 +42,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   ASSERT_IS_DOUBLE(prhs[1]);
   ASSERT_SAME_SIZE(prhs[0],prhs[1]);
   ASSERT_IS_DOUBLE(prhs[2]);
-  ASSERT_SCALAR(prhs[2]);
+  ASSERT_IS_SCALAR(prhs[2]);
 
   //create destination
   plhs[0] = mxCreateNumericArray(mxGetNumberOfDimensions(prhs[0]),
