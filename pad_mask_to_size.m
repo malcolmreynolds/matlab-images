@@ -1,0 +1,13 @@
+function m = pad_mask_to_size(mask,h,w,offx,offy)
+
+mask = [zeros(offy,size(mask,2));...
+     mask];
+mask = [zeros(size(mask,1),offx),...
+     mask];
+
+[sy sx] = size(mask);
+
+mask = [mask; ...
+        zeros(h-sy,sx)];
+m = [mask, ...
+     zeros(h,w-sx)];
